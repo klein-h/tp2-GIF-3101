@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerItems">
+        <item>GEL</item>
+        <item>GIF</item>
+        <item>GLO</item>
+        <item>IFT</item>
+    </string-array>
+</resources>
