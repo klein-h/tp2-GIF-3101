@@ -1,10 +1,10 @@
 package ca.ulaval.ima.tp2;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,8 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AboutFragment.OnFragmentInteractionListener,
+        DescriptionFragment.OnFragmentInteractionListener,
+        FormulaireFragment.OnFragmentInteractionListener,
+        InternetStatusFragment.OnFragmentInteractionListener{
 
+
+    FragmentManager fragmentManager = getSupportFragmentManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +37,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        AboutFragment fragment = new AboutFragment();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.f_container, fragment);
+        fragmentTransaction.commit();
+
     }
 
     @Override
@@ -65,22 +76,39 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri)
+    {
+
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         int id = item.getItemId();
 
         if (id == R.id.nav_about) {
-            // Handle the camera action
-        } else if (id == R.id.nav_form) {
-
-        } else if (id == R.id.nav_internet) {
-
-        } else if (id == R.id.nav_profil) {
-
+            AboutFragment fragment = new AboutFragment();
+            fragmentTransaction.replace(R.id.f_container, fragment);
+            fragmentTransaction.commit();
         }
-
+        else if (id == R.id.nav_internet) {
+            InternetStatusFragment fragment = new InternetStatusFragment();
+            fragmentTransaction.replace(R.id.f_container, fragment);
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.nav_form) {
+            FormulaireFragment fragment = new FormulaireFragment();
+            fragmentTransaction.replace(R.id.f_container, fragment);
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.nav_profil) {
+            DescriptionFragment fragment = new DescriptionFragment();
+            fragmentTransaction.replace(R.id.f_container, fragment);
+            fragmentTransaction.commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
