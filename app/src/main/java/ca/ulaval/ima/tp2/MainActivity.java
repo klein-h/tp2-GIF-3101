@@ -1,5 +1,6 @@
 package ca.ulaval.ima.tp2;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -20,17 +22,19 @@ public class MainActivity extends AppCompatActivity
         FormulaireFragment.OnFragmentInteractionListener,
         InternetStatusFragment.OnFragmentInteractionListener{
 
+    Student student = new Student();
+
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -41,15 +45,16 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.f_container, fragment);
         fragmentTransaction.commit();
-
     }
 
     @Override
     public void onBackPressed() {
+        getFragmentManager().popBackStack("backState", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -101,11 +106,17 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_form) {
             FormulaireFragment fragment = new FormulaireFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("student", student);
+            fragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.f_container, fragment);
             fragmentTransaction.commit();
         }
         else if (id == R.id.nav_profil) {
             DescriptionFragment fragment = new DescriptionFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("student", student);
+            fragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.f_container, fragment);
             fragmentTransaction.commit();
         }

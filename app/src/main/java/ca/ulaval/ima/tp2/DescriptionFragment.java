@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -25,6 +26,7 @@ public class DescriptionFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    Student student;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -58,13 +60,28 @@ public class DescriptionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if (getArguments() != null) {
+            this.student = getArguments().getParcelable("student");
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_description, container, false);
+        View view = inflater.inflate(R.layout.fragment_description, container, false);
+        TextView name =  view.findViewById(R.id.name_description);
+        TextView surname =  view.findViewById(R.id.surname_description);
+        TextView section =  view.findViewById(R.id.section_description);
+        TextView sexe =  view.findViewById(R.id.sexe_description);
+        TextView birth =  view.findViewById(R.id.date_birth);
+
+        name.setText(this.student.name);
+        surname.setText(this.student.surName);
+        section.setText(this.student.prg);
+        sexe.setText(this.student.sexe);
+        birth.setText(this.student.date);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

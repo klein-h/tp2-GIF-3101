@@ -2,14 +2,23 @@ package ca.ulaval.ima.tp2;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,6 +37,7 @@ public class FormulaireFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    Student student;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -60,6 +70,10 @@ public class FormulaireFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            this.student = bundle.getParcelable("student");
+        }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -90,16 +104,43 @@ public class FormulaireFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_formulaire, container, false);
+        final View view =  inflater.inflate(R.layout.fragment_formulaire, container, false);
 
-        EditText date =view.findViewById(R.id.date);
+        final EditText date = view.findViewById(R.id.date);
+        Button button = view.findViewById(R.id.formButton);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDatePickerDialog(v);
+            }
+        });
+        final RadioGroup sexe = view.findViewById(R.id.radioGroup);
+        final Spinner section = view.findViewById(R.id.spinner);
+        final EditText name = view.findViewById(R.id.nom);
+        final EditText surname = view.findViewById(R.id.prenom);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (name.getText().toString().length() == 0) {
+                    name.setError("Le nom ne doit pas etre vide");
+                    return;
+                }
+                if (surname.getText().toString().length() == 0) {
+                    surname.setError("Le prénom ne doit pas etre vide");
+                    return;
+                }
+                student.prg =  section.getSelectedItem().toString();
+                RadioButton rb = view.findViewById(sexe.getCheckedRadioButtonId());
+                student.sexe = rb.getText().toString();
+                student.name = name.getText().toString();
+                student.date = date.getText().toString();
+                student.surName = surname.getText().toString();
+                Intent  myIntent = new Intent(getActivity(),DescriptionActivity.class);
+                myIntent.putExtra("student", student);
+                getActivity().startActivity(myIntent);
             }
         });
         return view;
