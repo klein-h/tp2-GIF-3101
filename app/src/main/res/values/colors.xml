@@ -5,5 +5,6 @@
     <color name="internetOk">#27B90D</color>
     <color name="internetKO">#FF0600</color>
     <color name="colorAccent">#b9120d</color>
+    <color name="colorInput">#FFE300</color>
     <color name="grey">#C2BFBF</color>
 </resources>
